@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
 
-"""
-Draw a DNS zone tree diagram from a zone file using Graphviz.
+"""Draw a DNS zone tree diagram from a zone file using Graphviz."""
 
-Usage: python draw_zone_tree.py <zonefile> <origin> [output_name]
-Example: python draw_zone_tree.py zonefile.dnskensa.small.txt dnskensa.com dns_tree
-"""
-
-import sys
+import argparse
 from collections import defaultdict
 from graphviz import Digraph
 
@@ -168,13 +163,16 @@ def add_legend(dot):
             lg.edge(keys[i], keys[i + 1], style="invis")
 
 
-def draw_tree(zonefile, origin, output="dns_tree"):
+SUPPORTED_FORMATS = ["png", "svg", "pdf"]
+
+
+def draw_tree(zonefile, origin, output="dns_tree", fmt="png"):
     origin = origin.lower().rstrip(".")
     rrsets = parse_zonefile(zonefile)
     nodes = build_tree(rrsets, origin)
     delegation_points = find_delegation_points(nodes, origin)
 
-    dot = Digraph("dns_tree", format="png")
+    dot = Digraph("dns_tree", format=fmt)
     dot.attr(rankdir="TB", splines="line", nodesep="0.5", ranksep="0.8")
     dot.attr("node", fontsize="11")
     dot.attr("edge", color="#666666", arrowsize="0.6")
@@ -196,12 +194,29 @@ def draw_tree(zonefile, origin, output="dns_tree"):
 
     add_legend(dot)
 
+    for ext in SUPPORTED_FORMATS:
+        if output.endswith(f".{ext}"):
+            output = output[: -(len(ext) + 1)]
+            break
     dot.render(output, cleanup=True)
-    print(f"Tree diagram written to {output}.png")
+    print(f"Tree diagram written to {output}.{fmt}")
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        print(f"Usage: {sys.argv[0]} <zonefile> <origin> [output_name]")
-        sys.exit(1)
-    draw_tree(sys.argv[1], sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else "dns_tree")
+    parser = argparse.ArgumentParser(
+        description="Draw a DNS zone tree diagram from a zone file."
+    )
+    parser.add_argument("zonefile", help="path to the zone file")
+    parser.add_argument("origin", help="zone origin (e.g. example.com)")
+    parser.add_argument(
+        "-o", "--output", default="dns_tree", help="output filename (default: dns_tree)"
+    )
+    parser.add_argument(
+        "-f",
+        "--format",
+        default="png",
+        choices=SUPPORTED_FORMATS,
+        help="output format (default: png)",
+    )
+    args = parser.parse_args()
+    draw_tree(args.zonefile, args.origin, args.output, args.format)

@@ -1,0 +1,65 @@
+example.com. 86400 IN SOA mname.example.com. hostmaster.salesforce.com. 1000013585 43200 3600 3628800 300
+;;
+;; Nameserver records
+;;
+example.com.		86400	IN	NS	adns1.example.com.
+example.com.		86400	IN	NS	adns2.example.com.
+;;
+;; Null MX record
+;;
+example.com.		86400	IN	MX	0 .
+;;
+;; Zone apex TXT records
+;;
+example.com.		7200	IN	TXT	"v=spf1 include:_spf.google.com include:_spf.salesforce.com exists:%{i}._spf.corp.salesforce.com -all"
+example.com.		7200	IN	TXT	"crappy-service1-skdljfowerier27384hjskdf387"
+example.com.		7200	IN	TXT	"terrible-service-luiod7349jldsffhk389df"
+example.com.		7200	IN	TXT	"hopeless-service-sjkl2349jskf1736"
+example.com.		7200	IN	TXT	"google-site-verification=8783skdfhskdfhkerh7834"
+;;
+;; Address records for nameservers
+;;
+adns1.example.com.	86400	IN	A	3.225.161.117
+adns1.example.com.	86400	IN	AAAA	2600:1f18:6296:8902::c0de
+adns2.example.com.	86400	IN	A	52.88.78.179
+adns2.example.com.	86400	IN	AAAA	2600:1f14:990:2e01::bad
+;;
+;; Name underneath an empty non-terminal
+;;
+a.ent.example.com.	86400	IN	A	10.32.87.201
+;;
+;; Just to prevent wild from being an ENT
+;;
+wild.example.com.	86400	IN	TXT	"hi wildcard under me"
+;;
+;; Wildcard and explicit name parallel to wildcard
+;;
+*.wild.example.com.	86400	IN	A	10.1.1.1
+a.wild.example.com.	86400	IN	A	10.7.7.7
+;;
+;; CNAMEs
+;;
+ctest1.isdo.example.com.    3600    IN      CNAME   blah1.example.com.
+;;
+;; Wildcard CNAMEs
+;;
+*.wildc1.example.com.    3600    IN      CNAME   blah1.example.com.
+;;
+;; Child delegations
+;;
+sub1.example.com.      7200    IN      NS      ns1.sub1.example.com.
+sub1.example.com.      7200    IN      NS      ns2.sub1.example.com.
+ns1.sub1.example.com.  7200    IN      A       10.101.1.1
+ns2.sub1.example.com.  7200    IN      A       10.101.1.2
+;;
+;; Deeper names
+;;
+isdo.example.com.      7200    IN      MX      mx1.isdo.example.com.
+mx1.isdo.example.com.  7200    IN      A       10.9.8.7
+gno.isdo.example.com.       7200    IN      MX      mx1.gno.isdo.example.com.
+mx1.gno.isdo.example.com.      300     IN      MX 10.1.2.3
+mlacey.gno.isdo.example.com.   300  IN   TXT     "The boss"
+mlacey.gno.isdo.example.com.   300  IN   A       10.44.55.66
+mlacey.gno.isdo.example.com.   300  IN   AAAA    2001:db8::1
+c1.mlacey.gno.isdo.example.com. 300 IN  A       10.20.30.1
+c2.mlacey.gno.isdo.example.com. 300 IN  A       10.20.30.2
