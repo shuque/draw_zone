@@ -1,4 +1,4 @@
-# draw_zone_tree.py
+# draw_zone.py
 
 A Python script that generates a visual tree diagram of the DNS nodes
 (unique owner names) in a DNS zone file, annotated with the Resource
@@ -13,7 +13,7 @@ Record types present at each node, using Graphviz.
 ## Usage
 
 ```
-./draw_zone_tree.py <zonefile> <origin> [-o OUTPUT] [-f FORMAT]
+./draw_zone.py <zonefile> <origin> [-o OUTPUT] [-f FORMAT]
 ```
 
 ### Positional arguments
@@ -36,20 +36,20 @@ Record types present at each node, using Graphviz.
 Generate a PNG (default):
 
 ```
-./draw_zone_tree.py zonefile.dnskensa.small.txt dnskensa.com
+./draw_zone.py zonefile.dnskensa.small.txt dnskensa.com
 ```
 
 Specify output filename and format:
 
 ```
-./draw_zone_tree.py zonefile.dnskensa.small.txt dnskensa.com -o my_tree -f svg
+./draw_zone.py zonefile.dnskensa.small.txt dnskensa.com -o my_tree -f svg
 ```
 
 If the output filename already includes a matching extension, it will not
 be duplicated:
 
 ```
-./draw_zone_tree.py zonefile.dnskensa.small.txt dnskensa.com -o my_tree.png
+./draw_zone.py zonefile.dnskensa.small.txt dnskensa.com -o my_tree.png
 ```
 
 ## Zone file format
@@ -86,10 +86,10 @@ present at that node.
 
 ## Sample output
 
-Using the included `zonefile.dnskensa.small.txt`:
+Using the included `zonefile.example.com.txt`:
 
 ```
-./draw_zone_tree.py zonefile.dnskensa.small.txt dnskensa.com -o dns_tree
+./draw_zone.py zonefile.example.com.txt example.com -o dns_tree
 ```
 
 This produces `dns_tree.png` with a top-down tree rooted at the zone apex,
